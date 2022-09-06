@@ -4,58 +4,32 @@ import "./MapView.scss";
 import "leaflet/dist/leaflet.css";
 
 import { MapContainer, TileLayer } from "react-leaflet";
-import { MarkerCustomModel, MarkersCustom } from "./components/MarkersCustom";
+import { MarkersCustom } from "./components/MarkersCustom";
 import { NavBar } from "./components/NavBar";
 import { MapEventHandler } from "./utils";
-import { CoordinatesContext } from "./contexts";
-import { CoordinatesModel } from "./models/coordinates.model";
-import {
-  initialCoordinatesConst,
-  positionMocked,
-  urlMAP,
-  zoomParamsMap,
-} from "./constants";
+import { CoordinatesProvider } from "./contexts";
+import { positionMocked, urlMAP } from "./constants";
 import { TopBar } from "./components/TopBar";
 import { Icon } from "./components/Icon";
-import { PlacesContext } from "./contexts/places";
 import { ModalFormPlace } from "./components/ModalFormPlace";
+import { PlacesProvider } from "./contexts/places";
 
 export const MapView: FC = memo(() => {
-  const [currentCoords, setCurrentCoords] = useState<CoordinatesModel>(
-    initialCoordinatesConst
-  );
-  const [centerCoordinates, setCenterCoordinates] = useState<CoordinatesModel>(
-    initialCoordinatesConst
-  );
-
-  const [places, setPlaces] = useState<MarkerCustomModel[]>([]);
-
-  const [zoom, setZoom] = useState(zoomParamsMap);
   const [isEditMode, setIsEditMode] = useState(false);
 
   return (
     <>
       <TopBar title={isEditMode ? "Укажите меткой на объект" : "Карты"} />
-
-      <CoordinatesContext.Provider
-        value={{
-          coordinates: currentCoords,
-          setCoordinates: setCurrentCoords,
-          centerCoordinates,
-          setCenterCoordinates,
-          zoom,
-          setZoom,
-        }}
-      >
-        <PlacesContext.Provider value={{ places, setPlaces }}>
+      <CoordinatesProvider>
+        <PlacesProvider>
           <MapContainer
             center={positionMocked as any}
-            zoom={zoom}
+            zoom={18}
             scrollWheelZoom={false}
             tap={false}
           >
             <TileLayer url={urlMAP} />
-            <MarkersCustom places={places} />
+            <MarkersCustom />
             <MapEventHandler />
             {isEditMode && (
               <Icon
@@ -76,8 +50,8 @@ export const MapView: FC = memo(() => {
           {isEditMode && (
             <ModalFormPlace onClose={() => setIsEditMode(false)} />
           )}
-        </PlacesContext.Provider>
-      </CoordinatesContext.Provider>
+        </PlacesProvider>
+      </CoordinatesProvider>
     </>
   );
 });

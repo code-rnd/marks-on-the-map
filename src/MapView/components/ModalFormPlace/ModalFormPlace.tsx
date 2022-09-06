@@ -1,12 +1,12 @@
-import { FC, memo, useContext, useEffect } from "react";
+import { FC, memo, useEffect } from "react";
 import { Modal } from "../Modal";
-import { PlacesContext } from "../../contexts/places";
-import { CoordinatesContext } from "../../contexts";
+import { usePlaces } from "../../contexts/places";
+import { useCoordinates } from "../../contexts";
 
 export const ModalFormPlace: FC<{ onClose: () => void }> = memo(
   ({ onClose }) => {
-    const { centerCoordinates } = useContext(CoordinatesContext);
-    const { setPlaces, places } = useContext(PlacesContext);
+    const { centerCoordinates } = useCoordinates();
+    const { setPlaces, places } = usePlaces();
 
     useEffect(() => {
       console.log({ centerCoordinates, places });

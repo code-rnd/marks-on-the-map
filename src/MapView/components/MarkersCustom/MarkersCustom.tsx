@@ -2,15 +2,15 @@ import { FC, useCallback } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { icon } from "leaflet";
 import iconMarker from "leaflet/dist/images/marker-icon.png";
+import { usePlaces } from "../../contexts/places";
 
 export interface MarkerCustomModel {
   id: number;
   title: string;
   position: any[];
 }
-export const MarkersCustom: FC<{ places: MarkerCustomModel[] }> = ({
-  places,
-}) => {
+export const MarkersCustom: FC = () => {
+  const { places } = usePlaces();
   const handleClick = useCallback((place: MarkerCustomModel) => {
     console.log(place);
   }, []);

@@ -1,16 +1,18 @@
-import { FC, memo, useContext } from "react";
+import { FC, memo } from "react";
 import { useMapEvents } from "react-leaflet";
 
-import { CoordinatesContext } from "../../contexts";
+import { useCoordinates } from "../../contexts";
 
 export const MapEventHandler: FC = memo(() => {
-  const { setCoordinates, setCenterCoordinates } =
-    useContext(CoordinatesContext);
+  const { setCoordinates, setCenterCoordinates, setZoom } = useCoordinates();
 
   useMapEvents({
     click({ latlng }) {
       const coordinates = { lat: latlng.lat, lng: latlng.lng };
       setCoordinates(coordinates);
+    },
+    zoom(event) {
+      setZoom(event.target.getZoom());
     },
     dragend({ target }) {
       const center = target.getCenter();

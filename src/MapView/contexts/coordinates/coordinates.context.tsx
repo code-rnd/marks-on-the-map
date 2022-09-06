@@ -9,5 +9,5 @@ export const CoordinatesContext = createContext({
   setCenterCoordinates: (params: CoordinatesModel) => {},
 
   zoom: 0,
-  setZoom: ({}: any) => {},
+  setZoom: (count: number) => {},
 });
